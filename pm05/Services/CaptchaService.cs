@@ -42,7 +42,8 @@ namespace pm05.Services
                 g.SmoothingMode = SmoothingMode.AntiAlias;
                 g.Clear(Color.White);
 
-                using (var brush = new LinearGradientBrush(new Rectangle(0, 0, width, height), Color.White, Color.LightGray, 45f))
+                using (var brush = new LinearGradientBrush(new Rectangle(0, 0, width, height),
+                    Color.FromArgb(232, 244, 250), Color.FromArgb(200, 225, 238), 45f))
                 {
                     g.FillRectangle(brush, 0, 0, width, height);
                 }

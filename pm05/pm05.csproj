@@ -94,6 +94,7 @@
     <Compile Include="Forms\UsersManageForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Services\AppTheme.cs" />
     <Compile Include="Services\AuthService.cs" />
     <Compile Include="Services\BookingPaymentService.cs" />
     <Compile Include="Services\CaptchaService.cs" />

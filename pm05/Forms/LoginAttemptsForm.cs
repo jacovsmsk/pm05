@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using pm05.Data;
+using pm05.Services;
 
 namespace pm05.Forms
 {
@@ -35,6 +36,8 @@ namespace pm05.Forms
             StartPosition = FormStartPosition.CenterParent;
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
+
+            AppTheme.ApplyCrudForm(this, _grid);
         }
 
         private void LoadData()

@@ -72,6 +72,8 @@ namespace pm05.Forms
             _btnAdd.Enabled = canEdit;
             _btnEdit.Enabled = canEdit;
             _btnDelete.Enabled = canEdit;
+
+            AppTheme.ApplyCrudForm(this, _grid);
         }
 
         private void Grid_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)

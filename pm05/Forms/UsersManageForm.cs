@@ -69,6 +69,8 @@ namespace pm05.Forms
             StartPosition = FormStartPosition.CenterParent;
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
+
+            AppTheme.ApplyCrudForm(this, _grid);
         }
 
         private void ReloadGrid()

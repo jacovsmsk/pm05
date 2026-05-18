@@ -22,58 +22,77 @@ namespace pm05.Forms
 
         private void InitializeComponent()
         {
-            var lblFullName = new Label { Text = "ФИО", Location = new Point(12, 15), AutoSize = true };
-            _txtFullName = new TextBox { Location = new Point(12, 32), Size = new Size(280, 20) };
+            var header = AppTheme.CreateHeaderPanel("Регистрация", "Новая учётная запись клиента");
 
-            var lblLogin = new Label { Text = "Логин", Location = new Point(12, 58), AutoSize = true };
-            _txtLogin = new TextBox { Location = new Point(12, 75), Size = new Size(280, 20) };
+            var body = new Panel
+            {
+                Location = new Point(12, header.Height + 8),
+                Size = new Size(316, 230),
+                BackColor = AppTheme.Card
+            };
+
+            var lblFullName = new Label { Text = "ФИО", Location = new Point(16, 12), AutoSize = true, ForeColor = AppTheme.TextMuted };
+            _txtFullName = new TextBox { Location = new Point(16, 28), Size = new Size(284, 24), BorderStyle = BorderStyle.FixedSingle };
+
+            var lblLogin = new Label { Text = "Логин", Location = new Point(16, 58), AutoSize = true, ForeColor = AppTheme.TextMuted };
+            _txtLogin = new TextBox { Location = new Point(16, 74), Size = new Size(284, 24), BorderStyle = BorderStyle.FixedSingle };
 
             var lblPassword = new Label
             {
                 Text = $"Пароль (мин. {MinPasswordLength} символов)",
-                Location = new Point(12, 101),
-                AutoSize = true
+                Location = new Point(16, 104),
+                AutoSize = true,
+                ForeColor = AppTheme.TextMuted
             };
             _txtPassword = new TextBox
             {
-                Location = new Point(12, 118),
-                Size = new Size(280, 20),
+                Location = new Point(16, 120),
+                Size = new Size(284, 24),
+                BorderStyle = BorderStyle.FixedSingle,
                 UseSystemPasswordChar = true
             };
 
-            var lblConfirm = new Label { Text = "Подтвердите пароль", Location = new Point(12, 144), AutoSize = true };
+            var lblConfirm = new Label { Text = "Подтвердите пароль", Location = new Point(16, 150), AutoSize = true, ForeColor = AppTheme.TextMuted };
             _txtConfirm = new TextBox
             {
-                Location = new Point(12, 161),
-                Size = new Size(280, 20),
+                Location = new Point(16, 166),
+                Size = new Size(284, 24),
+                BorderStyle = BorderStyle.FixedSingle,
                 UseSystemPasswordChar = true
             };
 
             var btnRegister = new Button
             {
                 Text = "Зарегистрироваться",
-                Location = new Point(12, 198),
-                Size = new Size(140, 28)
+                Location = new Point(16, 200),
+                Size = new Size(140, 32)
             };
+            AppTheme.StylePrimaryButton(btnRegister);
             btnRegister.Click += BtnRegister_Click;
 
             var btnBack = new Button
             {
                 Text = "К входу",
-                Location = new Point(162, 198),
-                Size = new Size(130, 28)
+                Location = new Point(164, 200),
+                Size = new Size(136, 32)
             };
+            AppTheme.StyleSecondaryButton(btnBack);
             btnBack.Click += (_, __) => Close();
 
-            Controls.AddRange(new Control[]
+            body.Controls.AddRange(new Control[]
             {
                 lblFullName, _txtFullName, lblLogin, _txtLogin,
                 lblPassword, _txtPassword, lblConfirm, _txtConfirm,
                 btnRegister, btnBack
             });
 
+            Controls.Add(header);
+            Controls.Add(body);
+
+            BackColor = AppTheme.Background;
+            Font = new Font("Segoe UI", 9f);
             Text = "Регистрация";
-            ClientSize = new Size(310, 245);
+            ClientSize = new Size(340, header.Height + 250);
             StartPosition = FormStartPosition.CenterScreen;
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;

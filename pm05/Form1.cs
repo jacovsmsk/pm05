@@ -19,30 +19,40 @@ namespace pm05
         public Form1()
         {
             InitializeComponent();
+            ApplyTheme();
 
             _btnRegister = new Button
             {
                 Text = "Регистрация",
-                Location = new Point(348, 196),
-                Size = new Size(90, 23)
+                Location = new Point(22, 300),
+                Size = new Size(256, 32)
             };
+            AppTheme.StyleSecondaryButton(_btnRegister);
             _btnRegister.Click += BtnRegister_Click;
-            Controls.Add(_btnRegister);
+            pnlCard.Controls.Add(_btnRegister);
 
             _lblLockout = new Label
             {
                 AutoSize = true,
-                ForeColor = Color.DarkRed,
-                Font = new Font(Font.FontFamily, 9f, FontStyle.Bold),
-                Visible = false
+                ForeColor = Color.FromArgb(180, 50, 50),
+                Font = new Font("Segoe UI", 8.5f, FontStyle.Bold),
+                Visible = false,
+                Location = new Point(22, 292)
             };
-            Controls.Add(_lblLockout);
-            PositionLockoutLabel();
+            pnlCard.Controls.Add(_lblLockout);
+        }
+
+        private void ApplyTheme()
+        {
+            pnlSide.BackColor = AppTheme.Primary;
+            pnlCard.BackColor = AppTheme.Card;
+            AppTheme.StylePrimaryButton(btnLogin);
+            AppTheme.StyleSecondaryButton(btnRefresh);
         }
 
         private void PositionLockoutLabel()
         {
-            _lblLockout.Location = new Point(btnLogin.Left, btnLogin.Bottom + 6);
+            _lblLockout.Location = new Point(22, pnlButtons.Bottom + 4);
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -51,20 +61,10 @@ namespace pm05
             picCaptcha.Visible = false;
 
             txtLogin.TextChanged += TxtLogin_TextChanged;
-            txtLogin.Enter += TxtLogin_Enter;
 
             _lockoutTimer = new System.Windows.Forms.Timer { Interval = 1000 };
             _lockoutTimer.Tick += LockoutTimer_Tick;
             SyncLockoutUiWithCurrentLogin();
-        }
-
-        private void TxtLogin_Enter(object sender, EventArgs e)
-        {
-            if (txtLogin.Text == "Вводить сюда")
-            {
-                txtLogin.Text = string.Empty;
-                txtLogin.ForeColor = SystemColors.WindowText;
-            }
         }
 
         private void TxtLogin_TextChanged(object sender, EventArgs e)
@@ -74,10 +74,7 @@ namespace pm05
 
         private string GetLoginFromField()
         {
-            var text = txtLogin.Text?.Trim() ?? string.Empty;
-            if (string.Equals(text, "Вводить сюда", StringComparison.OrdinalIgnoreCase))
-                return string.Empty;
-            return text;
+            return txtLogin.Text?.Trim() ?? string.Empty;
         }
 
         private void SyncLockoutUiWithCurrentLogin()
@@ -290,8 +287,5 @@ namespace pm05
             }
         }
 
-        private void label1_Click(object sender, EventArgs e) { }
-
-        private void label2_Click(object sender, EventArgs e) { }
     }
 }

@@ -9,6 +9,7 @@ namespace pm05.Forms
     public class MainForm : Form
     {
         private readonly User _currentUser;
+        private Panel _pnlMenu;
         private Label _lblWelcome;
         private Button _btnCountries;
         private Button _btnTours;
@@ -27,30 +28,48 @@ namespace pm05.Forms
 
         private void InitializeComponent()
         {
-            _lblWelcome = new Label
+            var header = AppTheme.CreateHeaderPanel("Туристическое агентство", "Система учёта туров и бронирований");
+
+            _pnlMenu = new Panel
             {
-                AutoSize = true,
-                Location = new Point(12, 12),
-                Font = new Font(Font.FontFamily, 10f, FontStyle.Bold)
+                Location = new Point(12, header.Height + 8),
+                Size = new Size(256, 320),
+                BackColor = AppTheme.Background
             };
 
-            _btnCountries = CreateMenuButton("Страны", 48, BtnCountries_Click);
-            _btnTours = CreateMenuButton("Туры", 88, BtnTours_Click);
-            _btnClients = CreateMenuButton("Клиенты", 128, BtnClients_Click);
-            _btnBookings = CreateMenuButton("Бронирования", 168, BtnBookings_Click);
-            _btnPayments = CreateMenuButton("Оплаты", 208, BtnPayments_Click);
-            _btnUsers = CreateMenuButton("Пользователи", 260, BtnUsers_Click);
-            _btnLogs = CreateMenuButton("Журнал входов", 300, BtnLogs_Click);
-            var btnLogout = CreateMenuButton("Выход", 348, (_, __) => Close());
+            _lblWelcome = new Label
+            {
+                AutoSize = false,
+                Location = new Point(0, 0),
+                Size = new Size(256, 44),
+                Font = new Font("Segoe UI", 9f, FontStyle.Bold),
+                ForeColor = AppTheme.Primary
+            };
 
-            Controls.AddRange(new Control[]
+            _btnCountries = CreateMenuButton("🌍  Страны", 52, BtnCountries_Click);
+            _btnTours = CreateMenuButton("✈  Туры", 92, BtnTours_Click);
+            _btnClients = CreateMenuButton("👤  Клиенты", 132, BtnClients_Click);
+            _btnBookings = CreateMenuButton("📋  Бронирования", 172, BtnBookings_Click);
+            _btnPayments = CreateMenuButton("💳  Оплаты", 212, BtnPayments_Click);
+            _btnUsers = CreateMenuButton("⚙  Пользователи", 262, BtnUsers_Click);
+            _btnLogs = CreateMenuButton("📜  Журнал входов", 302, BtnLogs_Click);
+            var btnLogout = CreateMenuButton("Выход из системы", 352, (_, __) => Close());
+            AppTheme.StyleLogoutButton(btnLogout);
+            btnLogout.Font = new Font("Segoe UI", 9f, FontStyle.Italic);
+
+            _pnlMenu.Controls.AddRange(new Control[]
             {
                 _lblWelcome, _btnCountries, _btnTours, _btnClients, _btnBookings,
                 _btnPayments, _btnUsers, _btnLogs, btnLogout
             });
 
-            Text = "Туристическое агентство — главное меню";
-            ClientSize = new Size(240, 390);
+            Controls.Add(header);
+            Controls.Add(_pnlMenu);
+
+            BackColor = AppTheme.Background;
+            Font = new Font("Segoe UI", 9f);
+            Text = "Туристическое агентство";
+            ClientSize = new Size(280, header.Height + 340);
             StartPosition = FormStartPosition.CenterScreen;
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
@@ -61,9 +80,10 @@ namespace pm05.Forms
             var btn = new Button
             {
                 Text = text,
-                Location = new Point(12, top),
-                Size = new Size(210, 32)
+                Location = new Point(0, top),
+                Size = new Size(256, 34)
             };
+            AppTheme.StyleMenuButton(btn);
             btn.Click += click;
             return btn;
         }
@@ -72,7 +92,7 @@ namespace pm05.Forms
         {
             var roleName = RoleIds.GetName(_currentUser.RoleId);
             PermissionManager.SetRole(roleName);
-            _lblWelcome.Text = $"{_currentUser.FullName}\r\n({_currentUser.Login}, {roleName})";
+            _lblWelcome.Text = $"{_currentUser.FullName}\r\n{roleName} · {_currentUser.Login}";
 
             var isAdmin = _currentUser.RoleId == RoleIds.Admin;
             var isOperator = _currentUser.RoleId == RoleIds.Operator;
@@ -85,6 +105,21 @@ namespace pm05.Forms
             _btnPayments.Visible = isAdmin || isOperator;
             _btnCountries.Visible = isAdmin || isOperator || isUser;
             _btnTours.Visible = isAdmin || isOperator || isUser;
+
+            AdjustMenuLayout();
+        }
+
+        private void AdjustMenuLayout()
+        {
+            var top = 52;
+            foreach (Control control in _pnlMenu.Controls)
+            {
+                if (control is Button btn && btn.Visible)
+                {
+                    btn.Top = top;
+                    top += 40;
+                }
+            }
         }
 
         private void BtnCountries_Click(object sender, EventArgs e)
